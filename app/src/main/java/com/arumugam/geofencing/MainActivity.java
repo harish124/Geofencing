@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         loc = findViewById(R.id.location);
 
-        checkingPermissions();
+        //checkingPermissions();
 
         googleapiClient= new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -60,11 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if(!checkPlayServices())
         {
-            Toast.makeText(this,"Google Play services app required.!",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(this,"Google Play services is installed.!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please install Google Play Services.!",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-            //checkingPermissions();
+            checkingPermissions();
             location = LocationServices.FusedLocationApi.getLastLocation(googleapiClient);
 
             if(location!=null)
@@ -111,12 +107,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         //checkingPermissions();
 
-        locationRequest = new LocationRequest();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(5000);
+        try {
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleapiClient, locationRequest, this);
+            locationRequest = new LocationRequest();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(5000);
+            locationRequest.setFastestInterval(5000);
+
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleapiClient, locationRequest, this);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(this,"Please grant permissions to proceed.!",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
